@@ -72,6 +72,38 @@ class PaymentFormViewModelTests: XCTestCase {
         ])
     }
     
+    func test_ibanTextChangeToClearState_providesEmptySuggestions() {
+        let service = SuggestionsServiceStub()
+        let (sut, fields) = makeSUT(service: service)
+        let state = StateSpy(sut.state)
+        
+        fields.iban.text.accept(service.stub.query)
+        fields.iban.text.accept(service.stub.query)
+        fields.iban.text.accept("")
+        
+        XCTAssertEqual(state.values, [
+            .fields(fields.all),
+            .focus(fields.iban, service.stub.suggestions.map(SuggestionViewModel.init)),
+            .focus(fields.iban, [])
+        ])
+    }
+    
+    func test_TaxNumberTextChangeToClearState_providesEmptySuggestions() {
+        let service = SuggestionsServiceStub()
+        let (sut, fields) = makeSUT(service: service)
+        let state = StateSpy(sut.state)
+        
+        fields.taxNumber.text.accept(service.stub.query)
+        fields.taxNumber.text.accept(service.stub.query)
+        fields.taxNumber.text.accept("")
+        
+        XCTAssertEqual(state.values, [
+            .fields(fields.all),
+            .focus(fields.taxNumber, service.stub.suggestions.map(SuggestionViewModel.init)),
+            .focus(fields.taxNumber, [])
+        ])
+    }
+    
     func test_taxNumberTextChangeState_providesSuggestionsBasedOnText() {
         let service = SuggestionsServiceStub()
         let (sut, fields) = makeSUT(service: service)
