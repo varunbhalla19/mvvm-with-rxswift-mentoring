@@ -39,6 +39,8 @@ public struct PaymentFormViewModel {
             focus(for: taxNumber),
             search(for: iban),
             search(for: taxNumber),
+            editingEnd(for: iban),
+            editingEnd(for: taxNumber),
             suggestionSelection.map {
                 allFields
             },
@@ -62,6 +64,12 @@ public struct PaymentFormViewModel {
     private func focus(for field: FieldViewModel) -> Observable<State> {
         field.focus.map {
             .focus(field, [])
+        }
+    }
+    
+    private func editingEnd(for field: FieldViewModel) -> Observable<State> {
+        field.editingDidEnd.map {
+            .fields([iban, taxNumber, bankName, comment])
         }
     }
 }

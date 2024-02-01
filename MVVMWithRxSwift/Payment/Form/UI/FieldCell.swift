@@ -45,6 +45,10 @@ public class FieldCell: UITableViewCell {
             .bind(to: vm.focus)
             .disposed(by: disposeBag)
 
+        inputTextField.rx.controlEvent(.editingDidEnd)
+            .bind(to: vm.editingDidEnd)
+            .disposed(by: disposeBag)
+        
         cellTitleLabel.text = vm.title
     }
     

@@ -28,6 +28,20 @@ class PaymentFormViewModelTests: XCTestCase {
         ])
     }
     
+    func test_ibanEditingEnd_showsAllFields() {
+        let (sut, fields) = makeSUT()
+        let state = StateSpy(sut.state)
+
+        fields.iban.focus.accept(())
+        fields.iban.editingDidEnd.accept(())
+
+        XCTAssertEqual(state.values, [
+            .fields(fields.all),
+            .focus(fields.iban, []),
+            .fields(fields.all)
+        ])
+    }
+    
     func test_taxNumberFocusedState_includesOnlyTaxNumberField() {
         let (sut, fields) = makeSUT()
         let state = StateSpy(sut.state)
@@ -37,6 +51,20 @@ class PaymentFormViewModelTests: XCTestCase {
         XCTAssertEqual(state.values, [
             .fields(fields.all),
             .focus(fields.taxNumber, [])
+        ])
+    }
+    
+    func test_taxNumberEditingEnd_showsAllFields() {
+        let (sut, fields) = makeSUT()
+        let state = StateSpy(sut.state)
+
+        fields.taxNumber.focus.accept(())
+        fields.taxNumber.editingDidEnd.accept(())
+
+        XCTAssertEqual(state.values, [
+            .fields(fields.all),
+            .focus(fields.taxNumber, []),
+            .fields(fields.all)
         ])
     }
     
@@ -181,10 +209,10 @@ class PaymentFormViewModelTests: XCTestCase {
             comment: FieldViewModel,
             all: [FieldViewModel])
     ) {
-        let iban = FieldViewModel()
-        let taxNumber = FieldViewModel()
-        let bankName = FieldViewModel()
-        let comment = FieldViewModel()
+        let iban = FieldViewModel(title: "IBAN")
+        let taxNumber = FieldViewModel(title: "TAX NUMBER")
+        let bankName = FieldViewModel(title: "Bank Name")
+        let comment = FieldViewModel(title: "Comment")
         let sut = PaymentFormViewModel(iban: iban, taxNumber: taxNumber, bankName: bankName, comment: comment, service: service)
         return (sut, (iban, taxNumber, bankName, comment, [iban, taxNumber, bankName, comment]))
     }
