@@ -15,3 +15,10 @@ public struct SuggestionsRequest {
         self.query = query
     }
 }
+
+public struct FailableService: SuggestionsService {
+    public init() {}
+    public func perform(request: SuggestionsRequest) -> Single<[Suggestion]> {
+        .error(NSError(domain: "Custom", code: 404))
+    }
+}

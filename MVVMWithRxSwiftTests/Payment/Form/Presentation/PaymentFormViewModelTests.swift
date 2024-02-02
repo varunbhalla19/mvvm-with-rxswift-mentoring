@@ -146,6 +146,19 @@ class PaymentFormViewModelTests: XCTestCase {
         ])
     }
 
+    func test_SuggestionsServiceFailure_bringsNoSuggestions() {
+        let service = FailableService()
+        let (sut, fields) = makeSUT(service: service)
+        let state = StateSpy(sut.state)
+        
+        fields.iban.query.accept("123")
+
+        XCTAssertEqual(state.values, [
+            .fields(fields.all),
+            .focus(fields.iban, [])
+        ])
+    }
+    
     func test_bankNameTextChangeState_doesntChangeState() {
         let (sut, fields) = makeSUT()
         let state = StateSpy(sut.state)
@@ -202,7 +215,7 @@ class PaymentFormViewModelTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT(service: SuggestionsServiceStub = .init()) -> (
+    private func makeSUT(service: SuggestionsService = SuggestionsServiceStub()) -> (
         sut: PaymentFormViewModel,
         fields: (
             iban: FieldViewModel,
