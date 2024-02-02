@@ -11,12 +11,13 @@ public struct PaymentFormViewModel {
         case focus(FieldViewModel, [SuggestionViewModel])
     }
 
+    private let bag: DisposeBag = DisposeBag()
     private let iban: FieldViewModel
     private let taxNumber: FieldViewModel
     private let bankName: FieldViewModel
     private let comment: FieldViewModel
     private let service: SuggestionsService
-    private let suggestionSelection = PublishRelay<Void>()
+    private let suggestionSelection = PublishRelay<Suggestion>()
     
     public init(
         iban: FieldViewModel = .iban(),
@@ -30,6 +31,10 @@ public struct PaymentFormViewModel {
         self.bankName = bankName
         self.comment = comment
         self.service = service
+        
+        suggestionSelection.compactMap(\.taxNumber).bind(to: taxNumber.text).disposed(by: bag)
+        suggestionSelection.compactMap(\.iban).bind(to: iban.text).disposed(by: bag)
+        suggestionSelection.map { _ in "" }.bind(to: taxNumber.query, iban.query).disposed(by: bag)
     }
 
     public var state: Observable<State> {
@@ -41,7 +46,7 @@ public struct PaymentFormViewModel {
             search(for: taxNumber),
             editingEnd(for: iban),
             editingEnd(for: taxNumber),
-            suggestionSelection.map {
+            suggestionSelection.map { _ in
                 allFields
             },
             .just(allFields)
@@ -49,7 +54,7 @@ public struct PaymentFormViewModel {
     }
     
     private func search(for field: FieldViewModel) -> Observable<State> {
-        field.text
+        field.query
             .distinctUntilChanged()
             .skip(1)
             .flatMap { [service] query in

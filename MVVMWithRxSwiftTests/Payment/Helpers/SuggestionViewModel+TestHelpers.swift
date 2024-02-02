@@ -11,6 +11,6 @@ import MVVMWithRxSwift
 
 extension SuggestionViewModel {
     init(_ suggestion: Suggestion) {
-        self.init(suggestion, select: PublishRelay<Void>())
+        self.init(suggestion, select: PublishRelay<Suggestion>())
     }
 }

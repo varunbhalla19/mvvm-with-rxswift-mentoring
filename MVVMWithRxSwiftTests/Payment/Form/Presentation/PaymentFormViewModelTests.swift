@@ -91,8 +91,8 @@ class PaymentFormViewModelTests: XCTestCase {
         let (sut, fields) = makeSUT(service: service)
         let state = StateSpy(sut.state)
         
-        fields.iban.text.accept(service.stub.query)
-        fields.iban.text.accept(service.stub.query)
+        fields.iban.query.accept(service.stub.query)
+        fields.iban.query.accept(service.stub.query)
 
         XCTAssertEqual(state.values, [
             .fields(fields.all),
@@ -105,9 +105,9 @@ class PaymentFormViewModelTests: XCTestCase {
         let (sut, fields) = makeSUT(service: service)
         let state = StateSpy(sut.state)
         
-        fields.iban.text.accept(service.stub.query)
-        fields.iban.text.accept(service.stub.query)
-        fields.iban.text.accept("")
+        fields.iban.query.accept(service.stub.query)
+        fields.iban.query.accept(service.stub.query)
+        fields.iban.query.accept("")
         
         XCTAssertEqual(state.values, [
             .fields(fields.all),
@@ -121,9 +121,9 @@ class PaymentFormViewModelTests: XCTestCase {
         let (sut, fields) = makeSUT(service: service)
         let state = StateSpy(sut.state)
         
-        fields.taxNumber.text.accept(service.stub.query)
-        fields.taxNumber.text.accept(service.stub.query)
-        fields.taxNumber.text.accept("")
+        fields.taxNumber.query.accept(service.stub.query)
+        fields.taxNumber.query.accept(service.stub.query)
+        fields.taxNumber.query.accept("")
         
         XCTAssertEqual(state.values, [
             .fields(fields.all),
@@ -137,8 +137,8 @@ class PaymentFormViewModelTests: XCTestCase {
         let (sut, fields) = makeSUT(service: service)
         let state = StateSpy(sut.state)
         
-        fields.taxNumber.text.accept(service.stub.query)
-        fields.taxNumber.text.accept(service.stub.query)
+        fields.taxNumber.query.accept(service.stub.query)
+        fields.taxNumber.query.accept(service.stub.query)
 
         XCTAssertEqual(state.values, [
             .fields(fields.all),
@@ -169,7 +169,7 @@ class PaymentFormViewModelTests: XCTestCase {
         let (sut, fields) = makeSUT(service: service)
         let state = StateSpy(sut.state)
         
-        fields.iban.text.accept(service.stub.query)
+        fields.iban.query.accept(service.stub.query)
 
         let suggestion = try XCTUnwrap(state.values.last?.firstSuggestion, "Expected suggestions in the current state")
         suggestion.select.accept(())
@@ -177,6 +177,7 @@ class PaymentFormViewModelTests: XCTestCase {
         XCTAssertEqual(state.values, [
             .fields(fields.all),
             .focus(fields.iban, service.stub.suggestions.map(SuggestionViewModel.init)),
+            .focus(fields.iban, []),
             .fields(fields.all),
         ])
     }
@@ -186,7 +187,7 @@ class PaymentFormViewModelTests: XCTestCase {
         let (sut, fields) = makeSUT(service: service)
         let state = StateSpy(sut.state)
         
-        fields.taxNumber.text.accept(service.stub.query)
+        fields.taxNumber.query.accept(service.stub.query)
 
         let suggestion = try XCTUnwrap(state.values.last?.firstSuggestion, "Expected suggestions in the current state")
         suggestion.select.accept(())
@@ -194,6 +195,7 @@ class PaymentFormViewModelTests: XCTestCase {
         XCTAssertEqual(state.values, [
             .fields(fields.all),
             .focus(fields.taxNumber, service.stub.suggestions.map(SuggestionViewModel.init)),
+            .focus(fields.taxNumber, []),
             .fields(fields.all),
         ])
     }

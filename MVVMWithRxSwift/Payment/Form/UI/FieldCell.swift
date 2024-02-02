@@ -36,9 +36,10 @@ public class FieldCell: UITableViewCell {
             .disposed(by: disposeBag)
         
         inputTextField.rx.text
-            .orEmpty
-            .skip(1)
-            .bind(to: vm.text)
+            .changed // Programmatic changes to control value won’t be reported.
+            .distinctUntilChanged()
+            .compactMap { $0 }
+            .bind(to: vm.query)
             .disposed(by: disposeBag)
 
         focusButton.rx.tap

@@ -20,7 +20,7 @@ class FieldCellTests: XCTestCase {
         XCTAssertEqual(sut.inputTextField.text, "some text")
     }
     
-    func test_viewModelText_updatesOnTextFieldChange() {
+    func test_viewModelQuery_updatesOnTextFieldChange() {
         let (sut, vm) = makeSUT()
         
         XCTAssertEqual(vm.text.value, "")
@@ -28,7 +28,7 @@ class FieldCellTests: XCTestCase {
         sut.inputTextField.text = "some text"
         sut.inputTextField.sendActions(for: .editingChanged)
         
-        XCTAssertEqual(vm.text.value, "some text")
+        XCTAssertEqual(vm.query.value, "some text")
     }
 
     func test_titleLabelText_isViewModelTitleText() {

@@ -3,13 +3,15 @@
 //
 
 import RxCocoa
+import RxSwift
 import Differentiator
 
 public struct SuggestionViewModel {
     public let text: String
     public let select: PublishRelay<Void>
+    private let bag = DisposeBag()
     
-    public init(_ suggestion: Suggestion, select: PublishRelay<Void>) {
+    public init(_ suggestion: Suggestion, select: PublishRelay<Suggestion>) {
         switch (suggestion.iban, suggestion.taxNumber) {
         case let (.some(iban), .some(taxNumber)):
             self.text = "Iban: \(iban) | Tax number: \(taxNumber)"
@@ -20,7 +22,8 @@ public struct SuggestionViewModel {
         default:
             self.text = ""
         }
-        self.select = select
+        self.select = PublishRelay()
+        self.select.map { _ in suggestion }.bind(to: select).disposed(by: bag)
     }
 }
 

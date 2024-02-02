@@ -11,5 +11,6 @@ class RandomSuggestionsService: SuggestionsService {
                 iban: "\(Int.random(in: 10000...99999))",
                 taxNumber: "\(Int.random(in: 10000...99999))")
         })
+        .delay(.seconds((1...4).randomElement()!), scheduler: MainScheduler.instance)  // Random Delay for each request.
     }
 }
