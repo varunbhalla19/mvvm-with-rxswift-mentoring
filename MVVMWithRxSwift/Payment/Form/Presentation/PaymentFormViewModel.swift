@@ -57,7 +57,7 @@ public struct PaymentFormViewModel {
         field.query
             .distinctUntilChanged()
             .skip(1)
-            .flatMap { [service] query in
+            .flatMapLatest { [service] query in
                 query.isEmpty ? Observable.just([]) : service.perform(request: .init(query: query)).asObservable()
             }.map { [suggestionSelection] suggestions in
                 .focus(field, suggestions.map {
